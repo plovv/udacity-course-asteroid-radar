@@ -1,6 +1,7 @@
 package com.udacity.asteroidradar.main
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.database.getDatabase
 import com.udacity.asteroidradar.domain.Asteroid
@@ -87,7 +88,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 }else {
                     _pictureOfDayUrl.value = ""
                 }
-            } catch (networkError: HttpException) {
+            } catch (networkError: IOException) {
                 if(_pictureOfDayUrl.value.isNullOrEmpty() && !_networkError.value!!)
                     _networkError.value = true
             }
@@ -98,7 +99,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             try {
                 repo.refreshAsteroids()
-            } catch (networkError: HttpException) {
+            } catch (networkError: IOException) {
                 if(asteroids.value.isNullOrEmpty() && !_networkError.value!!)
                     _networkError.value = true
             }
